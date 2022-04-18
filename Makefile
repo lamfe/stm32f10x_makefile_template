@@ -69,10 +69,12 @@ LD_FLAGS = $(MC_FLAGS) -g -gdwarf-2 -mthumb -nostartfiles -Xlinker --gc-sections
 all: $(OBJECTS) $(PROJECT_NAME).elf  $(PROJECT_NAME).hex $(PROJECT_NAME).bin
 	$(TOOLCHAIN)size $(PROJECT_NAME).elf
 
-%o: %c
+# Cancel implicit rules properly - must be %.o, not %o
+# https://www.gnu.org/software/make/manual/html_node/Canceling-Rules.html
+%.o: %.c
 	$(CC) -c $(CP_FLAGS) -I . $(INC_DIR) $< -o $@
 
-%o: %s
+%.o: %.s
 	$(AS) -c $(AS_FLAGS) $< -o $@
 
 %elf: $(OBJECTS)
